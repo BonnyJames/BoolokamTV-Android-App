@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    android:layout_width="350dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="30dp"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@drawable/bkg_blue_vote_dialog"
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/box_confirmation" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vote Submitted"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="31sp"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:fontFamily="@font/helvetica_bold"
+            />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="29dp"
+            android:text="Your next available vote is tomorrow"
+            android:textAlignment="center"
+            android:textStyle="normal"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/helvetica"
+            />
+
+        <RelativeLayout
+            android:id="@+id/share_btn_rl"
+            android:background="@drawable/btn_share_to_get_vote_bkg"
+            android:layout_margin="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/paper_plane_blue" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/imageView5"
+                android:fontFamily="@font/helvetica_bold"
+                android:text="@string/share_to_get_more_votes"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
+                android:textColor="#0F62FF"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

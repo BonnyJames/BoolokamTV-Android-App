@@ -1,0 +1,159 @@
+<resources>
+    <string name="app_name">Boolokam TV</string>
+    <!--    <string name="default_web_client_id" translatable="false">28545478753-eummq2927u01ce2ql13a9b5b5ulec4bp.apps.googleusercontent.com</string>-->
+    <string name="publisher_id">ca-app-pub-3940256099942544~3347511713</string>
+    <!--<string name="publisher_id">ca-app-pub-1100520459694923~7000554554</string>-->
+    <string name="facebook_app_id">2703176636427041</string>
+    <string name="fb_login_protocol_scheme">fb2703176636427041</string>
+
+    <!-- Testing id for interstitial ad is ca-app-pub-3940256099942544/1033173712 -->
+    <string name="test_interstitial_ad_id">ca-app-pub-3940256099942544/1033173712</string>
+    <!-- Live interstitial ad ID is  -->
+    <string name="interstitial_ad_id">ca-app-pub-1100520459694923/7772001746</string>
+
+    <string name="download_foler">BoolokamTV</string>
+    <string name="panel_url">admin.boolokam.tv</string>
+    <string-array name="orders_list">
+        <item>Last Added</item>
+        <item>By Rating</item>
+        <item>By IMDb Rating</item>
+        <item>By Title</item>
+        <item>By Year</item>
+        <item>By Views</item>
+    </string-array>
+
+    <string name="media_route_menu_title">Play On</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="try_again">TRY AGAIN</string>
+    <string name="error_server">Check your internet connection</string>
+    <string name="no_source_available">No source available for this content</string>
+    <string name="cancel">Cancel</string>
+    <string name="submit">Submit</string>
+    <string name="rating_done">Your rating has been submitted successfully</string>
+    <string name="write_comment">Write a comment</string>
+    <string name="comment_hidden">Hidden</string>
+    <string name="now_time">Now</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="loading_subtitles">Loading subtitles ... </string>
+    <string name="for_you">For you</string>
+    <string name="search_about_actors">Search about actors here</string>
+    <string name="account_disabled">This account has been disabled</string>
+    <string name="operation_progress">Please wait.</string>
+    <string name="get_this_movie_here">Please Support by Downloading \n📲 BoolokamTV App\n\n✅ Vote for this film and support the Film-Maker \nBy Watching, Commenting and Rating\n\n🙏🏾🙏🏾🙏🏾\nEvery Support makes a difference. \n\n---- BoolokamTV Download Link ----</string>
+    <string name="get_this_tv_show_here">Get this tv show from link bellow  :</string>
+
+    <string name="get_this_serie_here">Get more series tv here</string>
+    <string name="get_this_channel_here">Get this channel from link bellow</string>
+
+    <string name="file_has_been_downloaded">File has been downloaded successfully</string>
+    <string name="Downloaded">Downloaded successfully</string>
+    <string name="exit">Exit</string>
+    <string name="policy_privacy">Policy privacy</string>
+    <string name="action_rate">Rate App</string>
+    <string name="action_support"><![CDATA[Report bug & Help]]></string>
+    <string name="share_this_app">Share this App</string>
+    <string name="my_profile">My Profile</string>
+    <string name="Logout">Logout</string>
+    <string name="login">Login / Register</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="later">Later</string>
+    <string name="please_login">Login to your account</string>
+    <string name="message_logout">You are successfully logout</string>
+    <string name="hint_name">Full Name</string>
+    <string name="update_my_profile">UPDATE MY PROFILE</string>
+    <string name="error_short_value">This value very short please enter correct value</string>
+    <string name="infos_updated_successfully">your infos has been updated successfully</string>
+    <string name="rate_this_channel">Rate this channel</string>
+    <string name="rate_this_serie_tv">Rate this Series TV</string>
+    <string name="rate_this_movie">Rate this movie</string>
+    <string name="channel_added_fav">This channel has been added to your list</string>
+    <string name="channel_removed_fav">This channel has been removed from your list</string>
+    <string name="website">Website</string>
+    <string name="update_now">Update Now</string>
+    <string name="skip">Skip</string>
+    <string name="title_notification">Enable push notification</string>
+    <string name="label_notification">Receive push notification</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="label_cache">Clear locally cached images. Currently : </string>
+    <string name="contact_us">Contact us</string>
+    <string name="version_label">Version</string>
+    <string name="enable_subtitles">Enable subtitles</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_message">Your message</string>
+    <string name="send_support">Send Message</string>
+    <string name="message_sended">Message has been sent successfully</string>
+    <string name="error_mail_valide">Please enter a valid E-mail</string>
+
+    <string name="title_slide_1">Boolokam TV</string>
+    <string name="description_slide_1">Thank you for download BoolokamTV App, We are constantly updating the content.</string>
+
+    <string name="title_slide_2">Watch All here</string>
+    <string name="description_slide_2">Watch All content in one place : Movies, TV Series, Live TV Channel and more </string>
+
+    <string name="title_slide_3">Use Subtitles</string>
+    <string name="description_slide_3">Watch your favorite Movies / TV Series with your original language by using subtitles</string>
+
+    <string name="title_slide_4">Download and watch later</string>
+    <string name="description_slide_4">Download Movies / TV Series keep it on your device to watch it later</string>
+
+    <string name="title_slide_5">Watch On Big screen</string>
+    <string name="description_slide_5">Cast any content Movies / TV Series and Live TV channel to you TV and watch with comfortably</string>
+
+    <string name="dialog_text_no_ads_title">Turn Off ads</string>
+    <string name="dialog_text_no_premium_wallpapers_title">Premium Content</string>
+    <string name="dialog_text_no_premium_wallpapers_description">Get unlimited Stickers</string>
+    <string name="dialog_text_no_ads_description">Use App more free without ads</string>
+    <string name="description_subsribte">With our pack. You can enjoy an ad-free experience and focus on the essential!</string>
+    <string name="download_premium_content">Download Premium content</string>
+    <string name="play_premium_content">Play Premium content</string>
+    <string name="use_content_for_free">Now you can use this premium content for free</string>
+    <string name="AD_MOB_ENABLED_BANNER">true</string>
+    <string name="hint_password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="password_confirm_message">The entered passwords do not match.</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="done">Done</string>
+    <string name="hint_reset_code">Reset code</string>
+    <string name="i_have_the_code">I have the code</string>
+    <string name="hint_password_confirm">Confirm password</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="old_password">Old password</string>
+    <string name="select_payment_method">Please select a payment method</string>
+    <string name="operation_canceller">Something Went Wrong (Operation Cancelled).</string>
+    <string name="select_your_plan">Select your plan</string>
+    <string name="select_plan">Please select a subscription plan</string>
+    <string name="enter_your_payment_details">Enter your payment details</string>
+    <string name="continue_string">Continue</string>
+    <string name="payment_transaction_id">Payment transaction Id</string>
+    <string name="other_payment_infos">Other Payment infos</string>
+    <string name="accept_privacy_policy_error">You should accept the privacy policy before login</string>
+    <string name="my_list">My List</string>
+    <string name="click_to_upload_file_here">Click to upload file here</string>
+    <string name="subscription_policy">Terms and Conditions</string>
+    <string name="watch_movies_tv_shows_amp_nshort_films"><![CDATA[Watch Movies, TV Shows &\nShort Films]]></string>
+    <string name="slider_bottom_txt">We are constantly updating our content with the newest and fresh</string>
+    <string name="slider_2_txt_1">The Future of \n Movies/ShortFilms is here</string>
+    <string name="slider_3_txt_1">Listen to Music\nWith the Whole Family</string>
+    <string name="login_txt2">Watch Movies, TV Shows\n and Short Films</string>
+    <string name="enter_phone_number">Enter Phone Number\nTo Continue</string>
+    <string name="watch_movies_tv_shows_n_short_films_and_listen_to_music">Watch Movies, TV Shows and Short Films</string>
+    <string name="quote_of_the_day">Quote of The Day</string>
+    <string name="competition_ending">Competition Ending</string>
+    <string name="total_number_of_votes">Total Number of Votes</string>
+    <string name="rank">Rank:</string>
+    <string name="default_notification_channel_id">boolokam_channel_id</string>
+    <string name="msg_token_fmt">FCM registration Token: %s</string>
+    <string name="share_to_get_more_votes">Share to get More Votes</string>
+</resources>

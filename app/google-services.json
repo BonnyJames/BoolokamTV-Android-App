@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "28545478753",
+    "project_id": "boolokamtv-9d982",
+    "storage_bucket": "boolokamtv-9d982.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28545478753:android:6771c9bacf4f536ec57a20",
+        "android_client_info": {
+          "package_name": "com.boolokam.boolokamtv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28545478753-vv563tthbqd5q05jcf8i33g9p45u0n75.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.boolokam.boolokamtv",
+            "certificate_hash": "3d68ecbdd28a8d25a05b17ee4b6227644259821d"
+          }
+        },
+        {
+          "client_id": "28545478753-eummq2927u01ce2ql13a9b5b5ulec4bp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfRXX0j3866MZyW96jeCyKTJhxzu-zjxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28545478753-eummq2927u01ce2ql13a9b5b5ulec4bp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

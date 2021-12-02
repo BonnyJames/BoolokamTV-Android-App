@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/relative_layout_slide"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_height="240dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+       >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_item_slide_one"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="10dp"
+            android:visibility="visible"
+            app:cardBackgroundColor="@color/black"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:cardPreventCornerOverlap="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="240dp">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/view_pager_slide"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:gravity="center"
+                    android:paddingBottom="0dp"></androidx.viewpager.widget.ViewPager>
+
+                <com.github.vivchar.viewpagerindicator.ViewPagerIndicator
+                    android:id="@+id/view_pager_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:padding="3dp"
+                    app:delimiterSize="4dp"
+                    app:itemSelectedTint="@color/white"
+                    app:itemSize="6dp"
+                    app:itemTint="@color/white_text" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+</LinearLayout>

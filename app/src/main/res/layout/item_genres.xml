@@ -1,0 +1,118 @@
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_width="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/relative_layout_slide"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="240dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewPagerImageSlider">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_item_slide_one"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="10dp"
+            android:visibility="visible"
+            app:cardBackgroundColor="@color/black"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="10dp"
+            app:cardPreventCornerOverlap="false">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager_slide"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="110dp"
+                    android:paddingEnd="110dp"
+                    android:paddingBottom="0dp" />
+
+
+                <com.github.vivchar.viewpagerindicator.ViewPagerIndicator
+                    android:id="@+id/view_pager_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="20dp"
+                    android:visibility="gone"
+                    android:padding="3dp"
+                    app:delimiterSize="4dp"
+                    app:itemSelectedTint="@color/white"
+                    app:itemSize="6dp"
+                    app:itemTint="@color/white_text" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+
+    <!--<TextView
+        android:id="@+id/genre_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Movies"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relative_layout_slide" />-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:minHeight="25dp"
+        android:visibility="gone"
+        android:id="@+id/recycle_view_categories"
+        android:layout_height="35dp"
+        android:layout_width="match_parent"/>
+    <RelativeLayout
+        android:id="@+id/genreRL"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_view_item_genre_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Movies"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/image_view_item_genre_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_apps"
+            app:tint="@color/red" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:minHeight="100dp"
+        android:visibility="visible"
+        android:id="@+id/recycle_view_posters_item_genre"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"/>
+</LinearLayout>

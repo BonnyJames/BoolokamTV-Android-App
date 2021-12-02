@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="watch_movies_tv_shows_amp_nshort_films"><![CDATA[Watch Movies, TV Shows &\nShort Films]]></string>
+    <string name="slider_bottom_txt">We are constantly updating our content with the newest and fresh</string>
+    <string name="slider_2_txt_1">The Future of \n Movies/ShortFilms is here</string>
+    <string name="slider_3_txt_1">Listen to Music\nWith the Whole Family</string>
+    <string name="login_txt2">Watch Movies, TV Shows,\nShort Films and Listen to Music</string>
+    <string name="enter_phone_number">Enter Phone Number\nTo Continue</string>
+    <string name="watch_movies_tv_shows_n_short_films_and_listen_to_music">Watch Movies, TV Shows,\n Short Films and Listen to Music</string>
+    <string name="quote_of_the_day">Quote of The Day</string>
+    <string name="competition_ending">Competition Ending</string>
+    <string name="total_number_of_votes">Total Number of Votes</string>
+    <string name="rank">Rank:</string>
+    <string name="default_notification_channel_id">boolokam_channel_id</string>
+    <string name="share_to_get_more_votes">Share to get More Votes</string>
+</resources>
