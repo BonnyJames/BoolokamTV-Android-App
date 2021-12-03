@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.stripe:stripe-android:14.5.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/85d0ac3d2e09f8b0feed7d9dec023112/transformed/jetified-stripe-android-14.5.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/85d0ac3d2e09f8b0feed7d9dec023112/transformed/jetified-stripe-android-14.5.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/85d0ac3d2e09f8b0feed7d9dec023112/transformed/jetified-stripe-android-14.5.0/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.stripe/stripe-android/14.5.0/3bd2a43c88cd557290ef20b479884b93cfd9231b/stripe-android-14.5.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.stripe/stripe-android/14.5.0/5949a371eb8adcb8c2e86b578f8be694c9d69d82/stripe-android-14.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

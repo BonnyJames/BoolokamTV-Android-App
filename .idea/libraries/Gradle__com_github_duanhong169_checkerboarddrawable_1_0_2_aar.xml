@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.duanhong169:checkerboarddrawable:1.0.2@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2ac39d3a08c2268acdc5fb84d08878de/transformed/jetified-checkerboarddrawable-1.0.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/abb399809f6c9e919d61225bd333bee5/transformed/jetified-checkerboarddrawable-1.0.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a510003ea3806a015c5918872bf8cf01/transformed/jetified-checkerboarddrawable-1.0.2/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a510003ea3806a015c5918872bf8cf01/transformed/jetified-checkerboarddrawable-1.0.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a510003ea3806a015c5918872bf8cf01/transformed/jetified-checkerboarddrawable-1.0.2/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.duanhong169/checkerboarddrawable/1.0.2/b778cac2f9b81941920c0a31087f5118c6fe4aed/checkerboarddrawable-1.0.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.duanhong169/checkerboarddrawable/1.0.2/51498ce1b2c75821be96aa951b7fe8319b97fca8/checkerboarddrawable-1.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
