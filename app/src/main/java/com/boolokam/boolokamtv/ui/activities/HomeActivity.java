@@ -45,7 +45,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeParams;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.Constants;
 import com.anjlab.android.iab.v3.TransactionDetails;
@@ -100,7 +110,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PurchasesUpdatedListener {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
@@ -123,9 +133,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private Dialog dialog;
     ConsentForm form;
     boolean isDrawerOpened;
+    BillingClient billingClient;
 
-    IInAppBillingService mService;
-
+    // ------------------------Old code for IN_APP PURCHASE----------------------------
+    /*IInAppBillingService mService;
     private static final String LOG_TAG = "iabv3";
     // put your Google merchant id here (as stated in public profile of your Payments Merchant Center)
     // if filled library will provide protection against Freedom alike Play Market simulators
@@ -149,7 +160,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         }
     };
-    private String payment_methode_id = "null";
+    private String payment_methode_id = "null";*/
+
+    private PurchasesUpdatedListener purchasesUpdatedListener = new PurchasesUpdatedListener() {
+        @Override
+        public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
+            // To be implemented in a later section.
+        }
+    };
+
+
+
+
 
     //Screen Casting variables
     private MenuItem mediaRouteMenuItem;
@@ -165,149 +187,93 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         getGenreList();
         initViews();
         initActions();
-        initBuy();
         firebaseSubscribe();
         initGDPR();
+        startBillingConnection();
     }
-    private void initBuy() {
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 
-
-        if(!BillingProcessor.isIabServiceAvailable(this)) {
-            //  showToast("In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16");
-        }
-
-        bp = new BillingProcessor(this, Global.MERCHANT_KEY, MERCHANT_ID, new BillingProcessor.IBillingHandler() {
+    private void startBillingConnection() {
+       billingClient = BillingClient.newBuilder(HomeActivity.this)
+                .setListener(purchasesUpdatedListener)
+                .enablePendingPurchases()
+                .build();
+        billingClient.startConnection(new BillingClientStateListener() {
             @Override
-            public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-                //  showToast("onProductPurchased: " + productId);
-                Intent intent= new Intent(HomeActivity.this,SplashActivity.class);
-                startActivity(intent);
-                finish();
-                updateTextViews();
-            }
-            @Override
-            public void onBillingError(int errorCode, @Nullable Throwable error) {
-                // showToast("onBillingError: " + Integer.toString(errorCode));
-            }
-            @Override
-            public void onBillingInitialized() {
-                //  showToast("onBillingInitialized");
-                readyToPurchase = true;
-                updateTextViews();
-            }
-            @Override
-            public void onPurchaseHistoryRestored() {
-                // showToast("onPurchaseHistoryRestored");
-                for(String sku : bp.listOwnedProducts())
-                    Log.d(LOG_TAG, "Owned Managed Product: " + sku);
-                for(String sku : bp.listOwnedSubscriptions())
-                    Log.d(LOG_TAG, "Owned Subscription: " + sku);
-                updateTextViews();
-            }
-        });
-        bp.loadOwnedPurchasesFromGoogle();
-    }
-    private void updateTextViews() {
-        PrefManager prf= new PrefManager(getApplicationContext());
-        bp.loadOwnedPurchasesFromGoogle();
+            public void onBillingSetupFinished(BillingResult billingResult) {
+                if (billingResult.getResponseCode() ==  BillingClient.BillingResponseCode.OK) {
+                    // The BillingClient is ready. You can query purchases here.
+                    if (Global.IS_LOGG)
+                        Log.d(Global.TAG, "Billing client successfully connected to the server");
 
-    }
-    public Bundle getPurchases(){
-        if (!bp.isInitialized()) {
-
-
-            //  Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        try{
-            // Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
-
-            return  mService.getPurchases(Constants.GOOGLE_API_VERSION, getApplicationContext().getPackageName(), Constants.PRODUCT_TYPE_SUBSCRIPTION, null);
-        }catch (Exception e) {
-            //  Toast.makeText(this, "ex", Toast.LENGTH_SHORT).show();
-
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public Boolean isSubscribe(String SUBSCRIPTION_ID_CHECK){
-
-        if (!bp.isSubscribed(Global.SUBSCRIPTION_ID))
-            return false;
-        Bundle b =  getPurchases();
-        if (b==null)
-            return  false;
-        if( b.getInt("RESPONSE_CODE") == 0){
-            // Toast.makeText(this, "RESPONSE_CODE", Toast.LENGTH_SHORT).show();
-            ArrayList<String> ownedSkus =
-                    b.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-            ArrayList<String>  purchaseDataList =
-                    b.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-            ArrayList<String>  signatureList =
-                    b.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-            String continuationToken =
-                    b.getString("INAPP_CONTINUATION_TOKEN");
-
-            if(purchaseDataList == null){
-                // Toast.makeText(this, "purchaseDataList null", Toast.LENGTH_SHORT).show();
-                return  false;
-
-            }
-            if(purchaseDataList.size()==0){
-                //  Toast.makeText(this, "purchaseDataList empty", Toast.LENGTH_SHORT).show();
-                return  false;
-            }
-            for (int i = 0; i < purchaseDataList.size(); ++i) {
-                String purchaseData = purchaseDataList.get(i);
-                String signature = signatureList.get(i);
-                String sku_1 = ownedSkus.get(i);
-                //Long tsLong = System.currentTimeMillis()/1000;
-
-                try {
-                    JSONObject rowOne = new JSONObject(purchaseData);
-                    String  productId =  rowOne.getString("productId") ;
-                    // Toast.makeText(this,productId, Toast.LENGTH_SHORT).show();
-
-                    if (productId.equals(SUBSCRIPTION_ID_CHECK)){
-
-                        Boolean  autoRenewing =  rowOne.getBoolean("autoRenewing");
-                        if (autoRenewing){
-                            // Toast.makeText(this, "is autoRenewing ", Toast.LENGTH_SHORT).show();
-                            return  true;
-                        }else{
-                            //    Toast.makeText(this, "is not autoRenewing ", Toast.LENGTH_SHORT).show();
-                            Long tsLong = System.currentTimeMillis()/1000;
-                            Long  purchaseTime =  rowOne.getLong("purchaseTime")/1000;
-                            if (tsLong > (purchaseTime + (Global.SUBSCRIPTION_DURATION*86400)) ){
-                                //   Toast.makeText(this, "is Expired ", Toast.LENGTH_SHORT).show();
-                                return  false;
-                            }else{
-                                return  true;
-                            }
-                        }
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }else{
+                    if (Global.IS_LOGG)
+                        Log.d(Global.TAG, "Billing client: Response code is " + billingResult.getResponseCode());
+                    if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.BILLING_UNAVAILABLE) {
+                        Toast.makeText(getApplicationContext(), "Please update your play store", Toast.LENGTH_LONG).show();
+                    } else
+                        Toast.makeText(getApplicationContext(), "Failed to connect Billing Server", Toast.LENGTH_SHORT).show();
                 }
             }
+            @Override
+            public void onBillingServiceDisconnected() {
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+                Toast.makeText(getApplicationContext(), "You are disconnected with billing server", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-
-        }else{
-            return false;
+    private void billingSKU_Details(List<String> skuList)
+    {
+        /*List<String> skuList = new ArrayList<> ();
+        skuList.add("premium_upgrade");
+        skuList.add("gas");*/
+        if (billingClient != null){
+            if (billingClient.isReady()) {
+                SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+                params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
+                billingClient.querySkuDetailsAsync(params.build(),
+                        new SkuDetailsResponseListener() {
+                            @Override
+                            public void onSkuDetailsResponse(BillingResult billingResult,
+                                                             List<SkuDetails> skuDetailsList) {
+                                // Process the result.
+                            }
+                        });
+            }
+            else
+            {
+                if (Global.IS_LOGG)
+                    Log.d(Global.TAG, "Billing client is not ready");
+                Toast.makeText(getApplicationContext(), "Something went wrong with billing server", Toast.LENGTH_SHORT).show();
+            }
+        }else
+        {
+            if (Global.IS_LOGG)
+                Log.d(Global.TAG, "Billing client is null");
+            Toast.makeText(getApplicationContext(), "Something went wrong with billing server", Toast.LENGTH_SHORT).show();
         }
+    }
 
-        return  false;
+    private void initiatePurchaseFlow(final SkuDetails skuDetails)
+    {
+        // Retrieve a value for "skuDetails" by calling querySkuDetailsAsync().
+        Handler handler = new Handler();
+        Runnable purchaseFlowRequest = new Runnable() {
+            @Override
+            public void run() {
+                if (Global.IS_LOGG)
+                    Log.d(Global.TAG, "Launching in-app purchase flow.");
+                BillingFlowParams purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build();
+                billingClient.launchBillingFlow(HomeActivity.this, purchaseParams);
+            }
+        };
+        handler.postDelayed(purchaseFlowRequest, 100);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data))
-            super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
     private void initActions() {
         image_view_activity_actors_back.setOnClickListener(v->{
@@ -610,6 +576,63 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         image_view_profile_nav_header_bg.setVisibility(View.GONE);
         Toasty.info(getApplicationContext(),getString(R.string.message_logout),Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> purchases) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+                && purchases != null) {
+            for (Purchase purchase : purchases) {
+                handlePurchase(purchase);
+            }
+        } else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
+            // Handle an error caused by a user cancelling the purchase flow.
+            if (Global.IS_LOGG) {
+                Log.d(Global.TAG, "User cancel the billing");
+                Log.d(Global.TAG, "USER_CANCELED: " + billingResult.toString());
+            }
+        }else if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+
+            if (Global.IS_LOGG)
+                Log.d(Global.TAG, "ITEM_ALREADY_OWNED: " + billingResult.toString());
+        }
+        else {
+            // Handle any other error codes.
+            if (Global.IS_LOGG) {
+                Log.d(Global.TAG, "Error: On Purchase updated: " + billingResult.getResponseCode());
+            }
+        }
+    }
+
+    void handlePurchase(Purchase purchase) {
+        // Purchase retrieved from BillingClient#queryPurchasesAsync or your PurchasesUpdatedListener.
+        //Purchase purchase;
+
+        // Verify the purchase.
+        // Ensure entitlement was not already granted for this purchaseToken.
+        // Grant entitlement to the user.
+
+        ConsumeParams consumeParams =
+                ConsumeParams.newBuilder()
+                        .setPurchaseToken(purchase.getPurchaseToken())
+                        .build();
+
+        ConsumeResponseListener listener = new ConsumeResponseListener() {
+            @Override
+            public void onConsumeResponse(BillingResult billingResult, String purchaseToken) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    // Handle the success of the consume operation.
+                    Toast.makeText(getApplicationContext(), "Successfully Purchased", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    if(Global.IS_LOGG)
+                        Log.d(Global.TAG,"Error in billing: "+billingResult.getDebugMessage());
+                }
+            }
+        };
+
+        billingClient.consumeAsync(consumeParams, listener);
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
 
         public ViewPagerAdapter(FragmentManager manager) {
@@ -1020,7 +1043,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         RelativeLayout relative_layout_select_method=(RelativeLayout) dialog.findViewById(R.id.relative_layout_select_method);
 
-        relative_layout_select_method.setOnClickListener(v->{
+        /*relative_layout_select_method.setOnClickListener(v->{
             if(payment_methode_id.equals("null")) {
                 Toasty.error(getApplicationContext(), getResources().getString(R.string.select_payment_method), Toast.LENGTH_LONG).show();
                 return;
@@ -1048,7 +1071,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     dialog.dismiss();
                     break;
             }
-        });
+        });*/
         text_view_go_pro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1064,28 +1087,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             relative_layout_subscibe_back.setVisibility(View.GONE);
         });
         card_view_gpay.setOnClickListener(v->{
-            payment_methode_id="gp";
+            //payment_methode_id="gp";
             card_view_gpay.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
             card_view_paypal.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_cash.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_credit_card.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
         });
         card_view_paypal.setOnClickListener(v->{
-            payment_methode_id="pp";
+            //payment_methode_id="pp";
             card_view_gpay.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_paypal.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
             card_view_cash.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_credit_card.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
         });
         card_view_credit_card.setOnClickListener(v->{
-            payment_methode_id="cc";
+            //payment_methode_id="cc";
             card_view_gpay.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_paypal.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_cash.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_credit_card.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
         });
         card_view_cash.setOnClickListener(v->{
-            payment_methode_id="cash";
+            //payment_methode_id="cash";
             card_view_gpay.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_paypal.setCardBackgroundColor(getResources().getColor(R.color.dark_gray));
             card_view_cash.setCardBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -1109,7 +1132,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConn);
+        //unbindService(mServiceConn);
     }
 
     @Override

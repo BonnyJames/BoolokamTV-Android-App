@@ -11,7 +11,7 @@ public class Global {
     public static final String ITEM_PURCHASE_CODE = "d506abfd-9fe2-4b71-b979-feff21bcad13";
 
     public static final boolean IS_TEST_ADS = false;
-    public static final boolean IS_LOGG = false;
+    public static final boolean IS_LOGG = true;
     public static final String TAG = "MOVIEAPP";
 
 

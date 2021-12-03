@@ -1,7 +1,5 @@
 package com.boolokam.boolokamtv.ui.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import es.dmoral.toasty.Toasty;
@@ -10,25 +8,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
-import com.anjlab.android.iab.v3.BillingProcessor;
-import com.anjlab.android.iab.v3.Constants;
-import com.anjlab.android.iab.v3.TransactionDetails;
 import com.boolokam.boolokamtv.Provider.PrefManager;
 import com.boolokam.boolokamtv.R;
 import com.boolokam.boolokamtv.api.apiClient;
@@ -48,8 +37,6 @@ import java.util.TimerTask;
 public class LoadActivity extends AppCompatActivity {
 
     private PrefManager prf;
-    IInAppBillingService mService;
-    private BillingProcessor bp;
     private boolean readyToPurchase = false;
     private static final String LOG_TAG = "iabv3";
     private static final String MERCHANT_ID=null;
@@ -57,19 +44,7 @@ public class LoadActivity extends AppCompatActivity {
     private  Integer id;
     private String type;
 
-    ServiceConnection mServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
 
-        @Override
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
-            mService = IInAppBillingService.Stub.asInterface(service);
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +74,6 @@ public class LoadActivity extends AppCompatActivity {
 
 
         prf= new PrefManager(getApplicationContext());
-        initBuy();
         /*( (RubberLoaderView) findViewById(R.id.loader1)).startLoading();*/
         Timer myTimer = new Timer();
         myTimer.schedule(new TimerTask() {
@@ -412,146 +386,24 @@ public class LoadActivity extends AppCompatActivity {
         }
 
     }
-    private void initBuy() {
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 
-
-        if(!BillingProcessor.isIabServiceAvailable(this)) {
-            //  showToast("In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16");
-        }
-
-        bp = new BillingProcessor(this, Global.MERCHANT_KEY, MERCHANT_ID, new BillingProcessor.IBillingHandler() {
-            @Override
-            public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-                updateTextViews();
-            }
-            @Override
-            public void onBillingError(int errorCode, @Nullable Throwable error) {
-            }
-            @Override
-            public void onBillingInitialized() {
-                readyToPurchase = true;
-                updateTextViews();
-            }
-            @Override
-            public void onPurchaseHistoryRestored() {
-                for(String sku : bp.listOwnedProducts())
-                    Log.d(LOG_TAG, "Owned Managed Product: " + sku);
-                for(String sku : bp.listOwnedSubscriptions())
-                    Log.d(LOG_TAG, "Owned Subscription: " + sku);
-                updateTextViews();
-            }
-        });
-        bp.loadOwnedPurchasesFromGoogle();
-    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConn);
     }
 
     private void updateTextViews() {
         PrefManager prf= new PrefManager(getApplicationContext());
-        bp.loadOwnedPurchasesFromGoogle();
-        if(isSubscribe(Global.SUBSCRIPTION_ID)){
-            prf.setString("SUBSCRIBED","TRUE");
-        }
-        else{
-            prf.setString("SUBSCRIBED","FALSE");
-        }
+
     }
-    public Boolean isSubscribe(String SUBSCRIPTION_ID_CHECK){
 
-        if (!bp.isSubscribed(Global.SUBSCRIPTION_ID))
-            return false;
-
-
-        Bundle b =  getPurchases();
-        if (b==null)
-            return  false;
-        if( b.getInt("RESPONSE_CODE") == 0){
-            ArrayList<String> ownedSkus =
-                    b.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-            ArrayList<String>  purchaseDataList =
-                    b.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-            ArrayList<String>  signatureList =
-                    b.getStringArrayList("INAPP_DATA_SIGNATURE_LIST");
-            String continuationToken =
-                    b.getString("INAPP_CONTINUATION_TOKEN");
-
-
-            if(purchaseDataList == null){
-                return  false;
-
-            }
-            if(purchaseDataList.size()==0){
-                return  false;
-            }
-            for (int i = 0; i < purchaseDataList.size(); ++i) {
-                String purchaseData = purchaseDataList.get(i);
-                String signature = signatureList.get(i);
-                String sku_1 = ownedSkus.get(i);
-                //Long tsLong = System.currentTimeMillis()/1000;
-
-                try {
-                    JSONObject rowOne = new JSONObject(purchaseData);
-                    String  productId =  rowOne.getString("productId") ;
-
-                    if (productId.equals(SUBSCRIPTION_ID_CHECK)){
-
-                        Boolean  autoRenewing =  rowOne.getBoolean("autoRenewing");
-                        if (autoRenewing){
-                            Long tsLong = System.currentTimeMillis()/1000;
-                            Long  purchaseTime =  rowOne.getLong("purchaseTime")/1000;
-                            return  true;
-                        }else{
-                            // Toast.makeText(this, "is not autoRenewing ", Toast.LENGTH_SHORT).show();
-                            Long tsLong = System.currentTimeMillis()/1000;
-                            Long  purchaseTime =  rowOne.getLong("purchaseTime")/1000;
-                            if (tsLong > (purchaseTime + (Global.SUBSCRIPTION_DURATION*86400)) ){
-                                //   Toast.makeText(this, "is Expired ", Toast.LENGTH_SHORT).show();
-                                return  false;
-                            }else{
-                                return  true;
-                            }
-                        }
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        }else{
-            return false;
-        }
-
-        return  false;
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data))
+
             super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public Bundle getPurchases(){
-        if (!bp.isInitialized()) {
-            return null;
-        }
-        try{
 
-            return  mService.getPurchases(Constants.GOOGLE_API_VERSION, getApplicationContext().getPackageName(), Constants.PRODUCT_TYPE_SUBSCRIPTION, null);
-        }catch (Exception e) {
-            // Toast.makeText(this, "ex", Toast.LENGTH_SHORT).show();
-
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public void getPoster(){
 

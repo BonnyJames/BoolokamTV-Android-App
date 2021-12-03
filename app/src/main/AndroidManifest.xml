@@ -40,24 +40,30 @@
             />
         <activity
             android:name=".ui.activities.LeaderboardActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils" />
         <activity
             android:name=".ui.activities.MovieVotesActivity"
             android:exported="true" />
         <activity
             android:name=".ui.activities.StripeActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <activity
             android:name=".ui.activities.FinishActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <activity
             android:name=".ui.activities.PlansActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <activity
             android:name=".ui.activities.CashActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <activity
             android:name=".ui.activities.PasswordActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <!--
 <meta-data
@@ -96,6 +102,7 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="true"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -113,6 +120,7 @@
             android:name=".ui.activities.PlayerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
+            android:exported="true"
             android:theme="@style/AppTheme" />
 
         <meta-data
@@ -149,6 +157,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/Theme.CastVideosDark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -161,28 +170,36 @@
         </activity>
         <activity
             android:name=".ui.activities.IntroActivity"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activities.MovieActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils" />
         <activity
             android:name=".ui.activities.HomeActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils" />
         <activity
             android:name=".ui.activities.YoutubeActivity"
             android:screenOrientation="landscape"
+            android:exported="true"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activities.ActorsActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.ActorActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils" />
         <activity
             android:name=".ui.activities.LoginActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestilsNew" />
         <activity
             android:name=".ui.activities.LoadActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -200,30 +217,39 @@
         </activity>
         <activity
             android:name=".ui.activities.GenreActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.TopActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.MyListActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.SerieActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils" />
         <activity
             android:name=".ui.activities.EditActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <activity
             android:name=".ui.activities.ChannelActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils" />
         <activity
             android:name=".ui.activities.CategoryActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.SearchActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.SplashActivity"
+            android:exported="true"
             android:theme="@style/AppThemeActionDestils">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -233,19 +259,24 @@
         </activity>
         <activity
             android:name=".ui.activities.SettingsActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.SupportActivity"
+            android:exported="true"
             android:theme="@style/Theme.ProfileDialog" />
         <activity
             android:name=".ui.activities.PolicyActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
         <activity
             android:name=".ui.activities.EmbedActivity"
+            android:exported="true"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.activities.RefundActivity"
+            android:exported="true"
             android:theme="@style/AppThemeNoAction" />
     </application>
 

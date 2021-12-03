@@ -1,7 +1,5 @@
 package com.boolokam.boolokamtv.ui.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.AppCompatSpinner;
@@ -23,11 +21,9 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.DownloadManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -38,7 +34,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Base64;
@@ -64,15 +59,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
-import com.anjlab.android.iab.v3.BillingProcessor;
-import com.anjlab.android.iab.v3.Constants;
-import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaLoadRequestData;
 import com.google.android.gms.cast.MediaMetadata;
@@ -255,26 +245,14 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
     private  Boolean fromLoad = false;
     private  int operationAfterAds = 0;
 
-    IInAppBillingService mService;
 
     private static final String LOG_TAG = "iabv3";
     // put your Google merchant id here (as stated in public profile of your Payments Merchant Center)
     // if filled library will provide protection against Freedom alike Play Market simulators
     private static final String MERCHANT_ID=null;
 
-    private BillingProcessor bp;
     private boolean readyToPurchase = false;
 
-    ServiceConnection mServiceConn = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mService = null;
-        }
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = IInAppBillingService.Stub.asInterface(service);
-        }
-    };
     private Dialog dialog;
     private boolean autoDisplay = false;
 
@@ -294,161 +272,15 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
         getPosterCastings();
         getSeasons();
         checkFavorite();
-        //showAdsBanner();
-
-        /*initRewarded();
-        loadRewardedVideoAd();*/
-        initBuy();
 
     }
-    /*public void loadRewardedVideoAd() {
-        PrefManager     prefManager= new PrefManager(getApplicationContext());
 
-        mRewardedVideoAd.loadAd(prefManager.getString("ADMIN_REWARDED_ADMOB_ID"),
-                new AdRequest.Builder().build());
-    }*/
-
-   /* public void initRewarded() {
-
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
-            @Override
-            public void onRewardedVideoAdLoaded() {
-                if (autoDisplay){
-                    autoDisplay = false;
-                    mRewardedVideoAd.show();
-                }
-                Log.d("Rewarded","onRewardedVideoAdLoaded ");
-
-            }
-
-            @Override
-            public void onRewardedVideoAdOpened() {
-                Log.d("Rewarded","onRewardedVideoAdOpened ");
-            }
-
-            @Override
-            public void onRewardedVideoStarted() {
-                Log.d("Rewarded","onRewardedVideoStarted ");
-
-            }
-
-            @Override
-            public void onRewardedVideoAdClosed() {
-                loadRewardedVideoAd();
-                Log.d("Rewarded","onRewardedVideoAdClosed ");
-
-            }
-
-            @Override
-            public void onRewarded(RewardItem rewardItem) {
-                dialog.dismiss();
-                Toasty.success(getApplicationContext(),getString(R.string.use_content_for_free)).show();
-                Log.d("Rewarded","onRewarded ");
-                switch (operationAfterAds){
-                    case  100 :
-                        selectedEpisode.setDownloadas("1");
-                        break;
-                    case  200 :
-                        selectedEpisode.setPlayas("1");
-                        break;
-                    case 300 :
-                        if (current_position_play != -1 ){
-                            playableList.get(current_position_play).setPremium("1");
-                            showSourcesPlayDialog();
-                        }
-                        break;
-                    case 400:
-                        if (current_position_download != -1 ){
-                            downloadableList.get(current_position_download).setPremium("1");
-                            showSourcesDownloadDialog();
-                        }
-                }
-            }
-
-            @Override
-            public void onRewardedVideoAdLeftApplication() {
-                Log.d("Rewarded","onRewardedVideoAdLeftApplication ");
-            }
-
-            @Override
-            public void onRewardedVideoAdFailedToLoad(int i) {
-                Log.d("Rewarded","onRewardedVideoAdFailedToLoad "+ i);
-            }
-
-            @Override
-            public void onRewardedVideoCompleted() {
-
-            }
-        });
-
-    }*/
-    private void initBuy() {
-        Intent serviceIntent =
-                new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-
-
-        if(!BillingProcessor.isIabServiceAvailable(this)) {
-            //  showToast("In-app billing service is unavailable, please upgrade Android Market/Play to version >= 3.9.16");
-        }
-
-        bp = new BillingProcessor(this, Global.MERCHANT_KEY, MERCHANT_ID, new BillingProcessor.IBillingHandler() {
-            @Override
-            public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-                //  showToast("onProductPurchased: " + productId);
-                Intent intent= new Intent(SerieActivity.this,SplashActivity.class);
-                startActivity(intent);
-                finish();
-                updateTextViews();
-            }
-            @Override
-            public void onBillingError(int errorCode, @Nullable Throwable error) {
-                // showToast("onBillingError: " + Integer.toString(errorCode));
-            }
-            @Override
-            public void onBillingInitialized() {
-                //  showToast("onBillingInitialized");
-                readyToPurchase = true;
-                updateTextViews();
-            }
-            @Override
-            public void onPurchaseHistoryRestored() {
-                // showToast("onPurchaseHistoryRestored");
-                for(String sku : bp.listOwnedProducts())
-                    Log.d(LOG_TAG, "Owned Managed Product: " + sku);
-                for(String sku : bp.listOwnedSubscriptions())
-                    Log.d(LOG_TAG, "Owned Subscription: " + sku);
-                updateTextViews();
-            }
-        });
-        bp.loadOwnedPurchasesFromGoogle();
-    }
 
     private void updateTextViews() {
         PrefManager prf= new PrefManager(getApplicationContext());
-        bp.loadOwnedPurchasesFromGoogle();
 
     }
-    public Bundle getPurchases(){
-        if (!bp.isInitialized()) {
 
-
-            //  Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-        try{
-            // Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
-
-            return  mService.getPurchases(Constants.GOOGLE_API_VERSION, getApplicationContext().getPackageName(), Constants.PRODUCT_TYPE_SUBSCRIPTION, null);
-        }catch (Exception e) {
-            //  Toast.makeText(this, "ex", Toast.LENGTH_SHORT).show();
-
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     private void setDownloadableList(Episode episode) {
         selectedEpisode = episode;
@@ -1432,7 +1264,7 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
             return mh;
         }
         @Override
-        public void onBindViewHolder(SourceAdapter.SourceHolder holder, final int position) {
+        public void onBindViewHolder(SourceAdapter.SourceHolder holder, @SuppressLint("RecyclerView") int position) {
             if (playableList.get(position).getTitle() == null){
                 holder.text_view_item_source_type.setText(playableList.get(position).getType());
             }else{
@@ -1562,8 +1394,9 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
             DownloadHolder mh = new DownloadHolder(v);
             return mh;
         }
+        @SuppressLint("RecyclerView")
         @Override
-        public void onBindViewHolder(DownloadsAdapter.DownloadHolder holder, final int position) {
+        public void onBindViewHolder(DownloadsAdapter.DownloadHolder holder, @SuppressLint("RecyclerView") int position) {
 
             if (downloadableList.get(position).getTitle() == null){
                 holder.text_view_item_source_type.setText(downloadableList.get(position).getType());
@@ -1700,7 +1533,7 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
             return mh;
         }
         @Override
-        public void onBindViewHolder(EpisodeHolder holder, final int position) {
+        public void onBindViewHolder(EpisodeHolder holder, @SuppressLint("RecyclerView") int position) {
             if (episodeList.get(position).getImage()!=null){
                 Picasso.with(SerieActivity.this).load(episodeList.get(position).getImage()).into(holder.image_view_item_episode_thumbail);
             }else{
@@ -2088,7 +1921,6 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
             }
             switch (payment_methode_id){
                 case "gp" :
-                    bp.subscribe(SerieActivity.this, Global.SUBSCRIPTION_ID);
                     dialog.dismiss();
                     break;
                 default:
@@ -2257,7 +2089,6 @@ public class SerieActivity extends AppCompatActivity implements PlaylistDownload
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConn);
     }
 
     public void Download(Source source){
