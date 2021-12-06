@@ -1,5 +1,7 @@
 package com.boolokam.boolokamtv.ui.player;
 
+import static com.google.android.exoplayer2.util.Util.castNonNull;
+
 import android.app.Activity;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -18,9 +20,9 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -36,11 +38,12 @@ import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.ExoTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -85,8 +88,8 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
     private CastSession mCastSession;
     private SessionManager mSessionManager;
 
-    private SimpleExoPlayerView mSimpleExoPlayerView;
-    public SimpleExoPlayer mExoPlayer;
+    private PlayerView mPlayerView;
+    public ExoPlayer  mExoPlayer;
     private ImageView ic_media_stop;
     private RelativeLayout payer_pause_play;
     private Boolean isLive = false;
@@ -99,8 +102,8 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
         mActivity = activity;
     }
 
-    public void onStart(SimpleExoPlayerView simpleExoPlayerView, Bundle bundle) {
-        mSimpleExoPlayerView = simpleExoPlayerView;
+    public void onStart(PlayerView playerView, Bundle bundle) {
+        mPlayerView = playerView;
         mUrl = bundle.getString("videoUrl");
         isLive = bundle.getBoolean("isLive");
         videoType = bundle.getString("videoType");
@@ -108,10 +111,12 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
         videoSubTile = bundle.getString("videoSubTile");
         videoImage = bundle.getString("videoImage");
         initPlayer();
-        mSimpleExoPlayerView.setPlayer(mExoPlayer);
+        mPlayerView.setPlayer(mExoPlayer);
+
 
         preparePlayer(null,0);
         updateCastSessionAndSessionManager();
+
 
     }
 
@@ -119,32 +124,34 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
             this.payer_pause_play =  payer_pause_play;
     }
     public void setMediaFull() {
-        mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+        mPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
         mExoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
     }
     public void setMediaNormal() {
-        mSimpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+        mPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
     }
     private void initPlayer() {
         // 1. Create a default TrackSelector
         Handler mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+
+        //ExoTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        ExoTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
 
         // 2. Create a default LoadControl
         LoadControl loadControl = new DefaultLoadControl();
 
         // 3. Create the player
-        mExoPlayer = ExoPlayerFactory.newSimpleInstance(mActivity,
-                trackSelector, loadControl);
+       /* mExoPlayer = new ExoPlayerFactory.newSimpleInstance(mActivity,
+                trackSelector, loadControl);*/
+        mExoPlayer = new ExoPlayer.Builder(mActivity)
+                /*.setTrackSelector(trackSelector)*/
+                .setLoadControl(loadControl)
+                .build();
     }
 
     public void preparePlayer(Subtitle subtitle,long seekTo) {
-
-
-
-
 
     // Produces Extractor instances for parsing the media data.
 //    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
@@ -192,16 +199,20 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
         }
         SingleSampleMediaSource subtitleSource = null;
         if (subtitle!=null){
-            if (subtitle.getType().equals("srt")) {
-                Format textFormat = Format.createTextSampleFormat(null, MimeTypes.APPLICATION_SUBRIP,
-                        null, Format.NO_VALUE, Format.NO_VALUE, "ar", null, Format.OFFSET_SAMPLE_RELATIVE);
+            /*if (subtitle.getType().equals("srt")) {
+               *//* Format textFormat = Format.createTextSampleFormat(null, MimeTypes.APPLICATION_SUBRIP,
+                        null, Format.NO_VALUE, Format.NO_VALUE, "ar", null, Format.OFFSET_SAMPLE_RELATIVE);*//*
+                Format textFormat =  new Format.Builder()
+                        .setSampleMimeType(MimeTypes.APPLICATION_SUBRIP)
+                        .setLanguage("en")
+                        .build();
                 subtitleSource = new SingleSampleMediaSource.Factory(dataSourceFactory)
                         .createMediaSource(Uri.parse(subtitle.getUrl()), textFormat, C.TIME_UNSET);
             }else if (subtitle.getType().equals("vtt")){
                 subtitleSource = new SingleSampleMediaSource(Uri.parse(subtitle.getUrl()), dataSourceFactory, Format.createTextSampleFormat(null, MimeTypes.TEXT_VTT, Format.NO_VALUE, "en", null), C.TIME_UNSET);
             }else if (subtitle.getType().equals("ass")){
                 subtitleSource = new SingleSampleMediaSource(Uri.parse(subtitle.getUrl()), dataSourceFactory, Format.createTextSampleFormat(null, MimeTypes.TEXT_SSA, Format.NO_VALUE, "en", null), C.TIME_UNSET);
-            }
+            }*/
             sourceSize++;
         }
 
@@ -287,9 +298,9 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
                 Log.d("MYAPP","onStatusUpdated");
                 if (remoteMediaClient.getMediaStatus() != null) {
                     if (remoteMediaClient.getMediaStatus().getPlayerState() == MediaStatus.PLAYER_STATE_PLAYING || remoteMediaClient.getMediaStatus().getPlayerState() == MediaStatus.PLAYER_STATE_BUFFERING) {
-                        mSimpleExoPlayerView.setUseController(false);
+                        mPlayerView.setUseController(false);
                     } else {
-                        mSimpleExoPlayerView.setUseController(true);
+                        mPlayerView.setUseController(true);
                     }
                     if (remoteMediaClient.getMediaStatus().getIdleReason() == MediaStatus.IDLE_REASON_FINISHED) {
                         mExoPlayer.seekToDefaultPosition();
@@ -355,7 +366,7 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
             mCastSession = mSessionManager.getCurrentCastSession();
         }
         if (mCastSession != null) {
-            mSimpleExoPlayerView.setUseController(false);
+            mPlayerView.setUseController(false);
             mExoPlayer.setPlayWhenReady(false);
             loadRemoteMedia(position, autoPlay);
         } else {
@@ -433,12 +444,12 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
 //        notifyPropertyChanged(BR.pausable);
     }
 
-    public SimpleExoPlayer getExoPlayer() {
+    public ExoPlayer getExoPlayer() {
         return mExoPlayer;
     }
 
-    public SimpleExoPlayerView getSimpleExoPlayerView() {
-        return mSimpleExoPlayerView;
+    public PlayerView getSimpleExoPlayerView() {
+        return mPlayerView;
     }
 
     public void setIsInProgress(boolean isInProgress) {
@@ -453,9 +464,11 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
     public boolean isLoaidingNow() {
         Log.i("TEST", "ExoPlayer Changed ");
         if (isLoadingNow)
-            payer_pause_play.setVisibility(View.GONE);
+            if(payer_pause_play!=null)
+                payer_pause_play.setVisibility(View.GONE);
         else
-            payer_pause_play.setVisibility(View.VISIBLE);
+            if(payer_pause_play!=null)
+                payer_pause_play.setVisibility(View.VISIBLE);
 
         return isLoadingNow;
     }
@@ -472,15 +485,15 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
 
 
 
-    @Override
+   /* @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
 
-    }
+    }*/
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
@@ -517,11 +530,11 @@ public class CustomPlayerViewModel extends BaseObservable implements ExoPlayer.E
 
     }
 
-
+/*
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
-    }
+    }*/
 
     @Override
     public void onPositionDiscontinuity(int reason) {

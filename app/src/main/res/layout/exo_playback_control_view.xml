@@ -10,7 +10,7 @@
     <LinearLayout
         android:gravity="center"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -33,10 +33,10 @@
             android:focusable="true"
             android:id="@+id/image_view_exo_player_rotation"
             android:padding="7dp"
-            android:tint="@color/white"
             app:srcCompat="@drawable/ic_screen_rotation"
             android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            app:tint="@color/white" />
         <ImageView
             android:visibility="gone"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -44,42 +44,44 @@
             android:focusable="true"
             android:id="@+id/image_view_exo_player_subtitles"
             android:padding="5dp"
-            android:tint="@color/white"
             app:srcCompat="@drawable/ic_subtitles"
             android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_height="40dp"
+            app:tint="@color/white" />
         <androidx.mediarouter.app.MediaRouteButton
             android:id="@+id/media_route_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
     </LinearLayout>
+
     <TextView
 
         android:id="@+id/text_view_exo_player_live"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="60dp"
-        android:background="@drawable/bg_live"
-        android:text="LIVE"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_live"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="2dp"
+        android:text="LIVE"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
     <ImageView
+        android:id="@+id/image_view_exo_player_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="10dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:focusable="true"
         android:clickable="true"
-        android:id="@+id/image_view_exo_player_back"
+        android:focusable="true"
         android:padding="7dp"
-        android:tint="@color/white"
         app:srcCompat="@drawable/ic_arrow_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
+        app:tint="@color/white" />
     <RelativeLayout
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
@@ -162,10 +164,10 @@
                     android:visibility="visible"
                     android:padding="15dp"
                     android:layout_width="80dp"
-                    android:tint="@color/white"
                     app:srcCompat="@drawable/ic_replay_10"
                     android:id="@+id/image_view_exo_player_replay_10"
-                    android:layout_height="80dp" />
+                    android:layout_height="80dp"
+                    app:tint="@color/white" />
             </RelativeLayout>
             <RelativeLayout
                 android:gravity="center"
@@ -178,10 +180,10 @@
                     android:clickable="true"
                     android:padding="0dp"
                     android:layout_width="80dp"
-                    android:tint="@color/white"
                     app:srcCompat="@drawable/ic_media_play"
                     android:id="@+id/exo_play"
-                    android:layout_height="80dp" />
+                    android:layout_height="80dp"
+                    app:tint="@color/white" />
                 <ImageView
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:focusable="true"
@@ -189,10 +191,10 @@
                     android:visibility="visible"
                     android:padding="0dp"
                     android:layout_width="80dp"
-                    android:tint="@color/white"
                     app:srcCompat="@drawable/ic_media_pause"
                     android:id="@+id/exo_pause"
-                    android:layout_height="80dp" />
+                    android:layout_height="80dp"
+                    app:tint="@color/white" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_weight="1"
@@ -207,10 +209,10 @@
                     android:visibility="visible"
                     android:padding="10dp"
                     android:layout_width="80dp"
-                    android:tint="@color/white"
                     app:srcCompat="@drawable/ic_forward_10"
                     android:id="@+id/image_view_exo_player_forward_10"
-                    android:layout_height="80dp" />
+                    android:layout_height="80dp"
+                    app:tint="@color/white" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

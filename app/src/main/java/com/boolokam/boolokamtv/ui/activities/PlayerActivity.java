@@ -14,6 +14,7 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
@@ -156,6 +157,7 @@ public class PlayerActivity extends AppCompatActivity {
         videoImage = bundle.getString("image");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+
         if (savedInstanceState == null) {
             customPlayerFragment =
                     CustomPlayerFragment.newInstance(getVideoUrl(),isLive,videoType,videoTitle,videoSubTile,videoImage,vodeoId,videoKind);
@@ -203,8 +205,6 @@ public class PlayerActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container, fragment, "CustomPlayerFragment");
         fragmentTransaction.commit();
-
-
     }
 
     private String getVideoUrl() {
